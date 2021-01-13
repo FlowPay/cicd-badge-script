@@ -1,5 +1,5 @@
 import XCTest
-@testable import linter_script
+@testable import cicd_badge_script
 
 final class linter_scriptTests: XCTestCase {
     func testExample() {

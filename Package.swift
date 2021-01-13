@@ -24,6 +24,6 @@ let package = Package(
             dependencies: [.product(name: "AsyncHTTPClient", package: "async-http-client")]),
         .testTarget(
             name: "cicd-badge-scriptTest",
-            dependencies: ["linter-script"]),
+            dependencies: ["cicd-badge-script"]),
     ]
 )
