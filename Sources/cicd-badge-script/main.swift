@@ -3,7 +3,7 @@ import Foundation
 import AsyncHTTPClient
 
 var file = try! String(contentsOfFile: "./meta.data", encoding: .utf8)
-let numberOfLines = Double(try! String(contentsOfFile: "./data.meta", encoding: .utf8))!
+let numberOfLines = Double(try! String(contentsOfFile: "./data.meta", encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines))!
 
 var rows = file.split(separator: "\n")
 
