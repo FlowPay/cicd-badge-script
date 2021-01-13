@@ -7,13 +7,16 @@ let loop: EventLoopFuture<Void>
 let linesLoop: EventLoopFuture<Void>
 let httpClient = HTTPClient(eventLoopGroupProvider: .createNew)
 
+class UnwrapError: Error { }
+
 do {
     let file = try String(contentsOfFile: "./meta.data", encoding: .utf8)
-    let numberOfLines = Double(try String(contentsOfFile: "./data.meta", encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines))!
+    guard let numberOfLines = Double(try String(contentsOfFile: "./data.meta", encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)) else { throw UnwrapError() }
 
     var rows = file.split(separator: "\n")
 
-    let info = String(rows.popLast()!)
+    guard let infoString = rows.popLast() else { throw UnwrapError()}
+    let info = String(infoString)
 
     let tokens = info.split(separator: " ")
 
@@ -24,23 +27,22 @@ do {
 
     var flag = false
     var previous = ""
-    tokens.map { String($0) }.forEach { token in 
+    try tokens.map { String($0) }.forEach { token in 
         if flag {
-            total = Double(token)!   
+            guard let tmp = Double(token) else { throw UnwrapError() }
+            total = tmp
             flag = false
         }
         if token == "Found" {
             flag = true
         }
         if token == "serious" {
-            errors = Double(previous)!
+            guard let tmp = Double(previous) else { throw UnwrapError() }
+            errors = tmp
         }
         previous = token
     }
 
-    print(total)
-    print(errors)
-    print(numberOfLines)
     let score = 10.0 - ((5*errors + (total - errors)) / numberOfLines) * 10
     let stringScore = String(format: "%.2f", score)
 
@@ -78,9 +80,16 @@ do {
     let file = try String(contentsOfFile: "./codecov.summary", encoding: .utf8)
     var summary = file.split(separator:"\n")
     let _ = summary.popLast()
-    let lines = summary.popLast()!
+    guard let lines = summary.popLast() else { throw UnwrapError() }
 
-    let linesPecentage = Double(String(lines[lines.index(after: lines.firstIndex(of: ":")!)..<lines.firstIndex(of: "%")!]).trimmingCharacters(in: .whitespacesAndNewlines))!
+    guard let beforeIndex = lines.firstIndex(of: ":"),
+          let lastIndex = lines.firstIndex(of: "%")
+     else { throw UnwrapError() }
+
+    let firstIndex = lines.index(after: beforeIndex)
+    let linesString = String(lines[firstIndex..<lastIndex])
+    guard let linesPecentage = Double(linesString.trimmingCharacters(in: .whitespacesAndNewlines)) else { throw UnwrapError() }
+
 
     let linesColor: String
     switch linesPecentage {
