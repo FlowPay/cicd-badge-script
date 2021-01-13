@@ -48,11 +48,11 @@ do {
 
     let color: String
     switch score {
-    case  _ where score < 2:
+    case  _ where score < 4:
         color = "red"
-    case _ where score < 4:
-        color = "orange"
     case _ where score < 6:
+        color = "orange"
+    case _ where score < 8:
         color = "yellow"
     default:
         color = "green"
@@ -93,11 +93,11 @@ do {
 
     let linesColor: String
     switch linesPecentage {
-    case _ where linesPecentage < 20:
-        linesColor = "red"
     case _ where linesPecentage < 40:
-        linesColor = "orange"
+        linesColor = "red"
     case _ where linesPecentage < 60:
+        linesColor = "orange"
+    case _ where linesPecentage < 80:
         linesColor = "yellow"
     default:
         linesColor = "green"
