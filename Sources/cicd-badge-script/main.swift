@@ -81,7 +81,7 @@ default:
 
 print("Coverage of \(linesPecentage)%")
 
-let lineRequest = try! HTTPClient.Request(url: "https://img.shields.io/badge/lines%20cov-\(linesPecentage)%25-\(linesColor)?logo=El%20Jueves&style=for-the-badge", method: .GET)
+let lineRequest = try! HTTPClient.Request(url: "https://img.shields.io/badge/coverage-\(linesPecentage)%25-\(linesColor)?logo=El%20Jueves&style=for-the-badge", method: .GET)
 let linesLoop = httpClient.execute(request: lineRequest)
     .map { response in 
         let body = response.body!
