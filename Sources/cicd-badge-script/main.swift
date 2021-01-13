@@ -49,7 +49,7 @@ case _ where score < 6:
 default:
     color = "green"
 }
-print(color)
+print("Linting Score: \(score) out of 10")
 
 let httpClient = HTTPClient(eventLoopGroupProvider: .createNew)
 let request = try! HTTPClient.Request(url: "https://img.shields.io/badge/linting-\(stringScore)-\(color)?logo=swift&style=for-the-badge", method: .GET)
@@ -65,15 +65,7 @@ var summary = file.split(separator:"\n")
 let functions = summary.popLast()!
 let lines = summary.popLast()!
 
-print(lines)
-print(functions)
-
-print(lines.index(after: lines.firstIndex(of: ":")!))
-print(lines.firstIndex(of: "%")!)
-
 let linesPecentage = Double(String(lines[lines.index(after: lines.firstIndex(of: ":")!)..<lines.firstIndex(of: "%")!]).trimmingCharacters(in: .whitespacesAndNewlines))!
-
-let functionPercentage = Double(String(functions[functions.index(after: functions.firstIndex(of: ":")!)..<functions.firstIndex(of: "%")!]).trimmingCharacters(in: .whitespacesAndNewlines))!
 
 let linesColor: String
 switch linesPecentage {
@@ -87,7 +79,9 @@ default:
     linesColor = "green"
 }
 
-let lineRequest = try! HTTPClient.Request(url: "https://img.shields.io/badge/lines%20cov-\(linesPecentage)%25-\(linesColor)?logo=codersRank&style=for-the-badge", method: .GET)
+print("Coverage of \(linesPecentage)%")
+
+let lineRequest = try! HTTPClient.Request(url: "https://img.shields.io/badge/lines%20cov-\(linesPecentage)%25-\(linesColor)?logo=El%20Jueves&style=for-the-badge", method: .GET)
 let linesLoop = httpClient.execute(request: lineRequest)
     .map { response in 
         let body = response.body!
@@ -95,28 +89,9 @@ let linesLoop = httpClient.execute(request: lineRequest)
         return
     }
 
-let functionColor: String
-switch functionPercentage {
-case _ where functionPercentage < 20:
-    functionColor = "red"
-case _ where functionPercentage < 40:
-    functionColor = "orange"
-case _ where functionPercentage < 60:
-    functionColor = "yellow"
-default:
-    functionColor = "green"
-}
-
-let functionRequest = try! HTTPClient.Request(url: "https://img.shields.io/badge/function%20cov-\(functionColor)%25-\(functionPercentage)?logo=codersRank&style=for-the-badge", method: .GET)
-let functionLoop = httpClient.execute(request: lineRequest)
-    .map { response in 
-        let body = response.body!
-        FileManager().createFile(atPath: "./function_cov_badge.svg", contents: body.getData(at: 0, length: body.readableBytes))
-        return
-    }
-
 try! loop.wait()
+print("Wrote linting svg")
 try! linesLoop.wait()
-try! functionLoop.wait()
+print("Wrote coverage svg")
 
 try! httpClient.syncShutdown()

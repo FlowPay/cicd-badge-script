@@ -23,7 +23,7 @@ let package = Package(
             name: "cicd-badge-script",
             dependencies: [.product(name: "AsyncHTTPClient", package: "async-http-client")]),
         .testTarget(
-            name: "cicd-badge-scriptTest",
+            name: "cicdBadgeScriptTest",
             dependencies: ["cicd-badge-script"]),
     ]
 )
