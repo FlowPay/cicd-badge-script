@@ -1,0 +1,2 @@
+# CICD badge script
+
