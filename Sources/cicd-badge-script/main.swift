@@ -2,7 +2,7 @@
 import Foundation
 import AsyncHTTPClient
 import NIO
-import NIOCore
+import NIOFoundationCompat
 
 let loop: EventLoopFuture<Void>
 let linesLoop: EventLoopFuture<Void>
