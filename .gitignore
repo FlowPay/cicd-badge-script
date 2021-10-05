@@ -188,3 +188,4 @@ docker-compose.yml
 conf.coveragerc
 .swiftpm
 .build
+*.resolved
